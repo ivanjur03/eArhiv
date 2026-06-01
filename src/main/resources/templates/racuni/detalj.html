@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head><title>Detalji računa – e-Arhiv</title></head>
+<body>
+<main>
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+        <a class="btn btn-secondary btn-sm" href="/racuni">← Natrag</a>
+        <h2 style="font-size:1.3rem; color:#1a365d;" th:text="'Račun: ' + ${racun.brojRacuna}">Račun</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+        <div class="card-title">Podaci o računu</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <label>Broj računa</label>
+                <p th:text="${racun.brojRacuna}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Izdavatelj</label>
+                <p th:text="${racun.izdavatelj}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Primatelj</label>
+                <p th:text="${racun.primatelj ?: '—'}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Korisnik</label>
+                <p th:text="${racun.korisnik}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Datum izdavanja</label>
+                <p th:text="${#temporals.format(racun.datumIzdavanja, 'dd.MM.yyyy')}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Datum dospijeća</label>
+                <p th:text="${racun.datumDospijeca != null ? #temporals.format(racun.datumDospijeca, 'dd.MM.yyyy') : '—'}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Iznos</label>
+                <p style="font-size:1.1rem; font-weight:700; color:#2b6cb0;"
+                   th:text="${#numbers.formatDecimal(racun.iznos, 1, 2) + ' ' + racun.valuta}">—</p>
+            </div>
+            <div class="detail-item">
+                <label>Datum učitavanja</label>
+                <p th:text="${racun.datumUcitavanja != null ? #temporals.format(racun.datumUcitavanja, 'dd.MM.yyyy HH:mm') : '—'}">—</p>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;" th:if="${racun.opis}">
+                <label>Opis / napomena</label>
+                <p th:text="${racun.opis}">—</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Priložene datoteke
+            <span class="badge badge-blue" th:text="${#lists.size(racun.datoteke)}">0</span>
+        </div>
+        <table th:if="${not #lists.isEmpty(racun.datoteke)}">
+            <thead>
+            <tr>
+                <th>Naziv datoteke</th>
+                <th>Tip</th>
+                <th>Veličina</th>
+                <th>Datum učitavanja</th>
+                <th>Preuzimanje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="d : ${racun.datoteke}">
+                <td th:text="${d.naziv}">dokument.pdf</td>
+                <td><span class="badge badge-blue" th:text="${d.tip}">application/pdf</span></td>
+                <td th:text="${d.velicina != null ? #numbers.formatDecimal(d.velicina / 1024.0, 1, 1) + ' KB' : '—'}">—</td>
+                <td th:text="${d.datumUcitavanja != null ? #temporals.format(d.datumUcitavanja, 'dd.MM.yyyy HH:mm') : '—'}">—</td>
+                <td>
+                    <a class="btn btn-sm btn-primary"
+                       th:href="@{/racuni/datoteke/{id}/download(id=${d.id})}">Preuzmi</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(racun.datoteke)}" style="color:#718096;">Nema priloženih datoteka.</p>
+    </div>
+
+    <div style="margin-top:1.5rem; display:flex; gap:1rem;">
+        <form th:action="@{/racuni/{id}/obrisi(id=${racun.id})}" method="post"
+              onsubmit="return confirm('Jeste li sigurni da želite obrisati ovaj račun i sve priložene datoteke?')">
+            <button class="btn btn-danger" type="submit">Obriši račun</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

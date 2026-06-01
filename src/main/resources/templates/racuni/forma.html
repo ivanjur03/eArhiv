@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head><title>Novi račun – e-Arhiv</title></head>
+<body>
+<main>
+    <div class="card" style="max-width:780px; margin:0 auto;">
+        <div class="card-title">Dodaj novi račun</div>
+        <form th:action="@{/racuni}" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="brojRacuna">Broj računa *</label>
+                    <input class="form-control" type="text" id="brojRacuna" name="brojRacuna"
+                           placeholder="npr. R-2024-001" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="izdavatelj">Izdavatelj *</label>
+                    <input class="form-control" type="text" id="izdavatelj" name="izdavatelj"
+                           placeholder="Naziv tvrtke izdavatelja" required/>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="primatelj">Primatelj</label>
+                    <input class="form-control" type="text" id="primatelj" name="primatelj"
+                           placeholder="Naziv primatelja"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="korisnik">Korisnik *</label>
+                    <input class="form-control" type="text" id="korisnik" name="korisnik"
+                           placeholder="Korisničko ime" required/>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="datumIzdavanja">Datum izdavanja *</label>
+                    <input class="form-control" type="date" id="datumIzdavanja" name="datumIzdavanja" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="datumDospijeca">Datum dospijeća</label>
+                    <input class="form-control" type="date" id="datumDospijeca" name="datumDospijeca"/>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="iznos">Iznos *</label>
+                    <input class="form-control" type="number" id="iznos" name="iznos"
+                           step="0.01" min="0" placeholder="0.00" required/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="valuta">Valuta</label>
+                    <select class="form-control" id="valuta" name="valuta">
+                        <option value="EUR" selected>EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="HRK">HRK</option>
+                        <option value="GBP">GBP</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="opis">Opis / napomena</label>
+                <textarea class="form-control" id="opis" name="opis" rows="3"
+                          placeholder="Opcionalni opis ili napomena uz račun"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="datoteke">Priložene datoteke</label>
+                <input class="form-control" type="file" id="datoteke" name="datoteke" multiple/>
+                <small style="color:#718096; font-size:.8rem;">Možete priložiti više datoteka (PDF, XML, slike…). Maks. 10 MB po datoteci.</small>
+            </div>
+            <div style="display:flex; gap:1rem; margin-top:.5rem;">
+                <button class="btn btn-primary" type="submit">Spremi račun</button>
+                <a class="btn btn-secondary" href="/racuni">Odustani</a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

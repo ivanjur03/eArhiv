@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html th:fragment="layout(content)"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>e-Arhiv</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f4f8; color: #2d3748; min-height: 100vh; }
+
+        /* Navbar */
+        nav { background: #1a365d; color: #fff; padding: 0 2rem; display: flex; align-items: center; height: 60px; gap: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+        nav .brand { font-size: 1.4rem; font-weight: 700; color: #90cdf4; text-decoration: none; letter-spacing: .5px; white-space: nowrap; }
+        nav .nav-links { display: flex; gap: 1.5rem; flex: 1; }
+        nav .nav-links a { color: #e2e8f0; text-decoration: none; font-size: .95rem; padding: .25rem .5rem; border-radius: 4px; transition: background .2s; }
+        nav .nav-links a:hover { background: rgba(255,255,255,.12); }
+        nav .nav-right { display: flex; align-items: center; gap: 1rem; margin-left: auto; }
+        nav .btn-add { background: #3182ce; color: #fff; padding: .4rem 1rem; border-radius: 6px; text-decoration: none; font-size: .9rem; font-weight: 600; transition: background .2s; white-space: nowrap; }
+        nav .btn-add:hover { background: #2c5282; }
+        nav .user-info { color: #bee3f8; font-size: .9rem; }
+        nav form.logout-form { margin: 0; }
+        nav .btn-logout { background: transparent; border: 1px solid #4a90d9; color: #bee3f8; padding: .35rem .85rem; border-radius: 6px; font-size: .85rem; cursor: pointer; transition: background .2s; }
+        nav .btn-logout:hover { background: rgba(255,255,255,.1); }
+
+        /* Page container */
+        .page-container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+
+        /* Card */
+        .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,.1); padding: 2rem; }
+        .card-title { font-size: 1.4rem; font-weight: 700; color: #1a365d; margin-bottom: 1.5rem; padding-bottom: .75rem; border-bottom: 2px solid #ebf4ff; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+        th { background: #ebf8ff; color: #2b6cb0; text-align: left; padding: .75rem 1rem; font-weight: 600; border-bottom: 2px solid #bee3f8; }
+        td { padding: .7rem 1rem; border-bottom: 1px solid #e2e8f0; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: #f7fafc; }
+
+        /* Buttons */
+        .btn { display: inline-block; padding: .4rem .9rem; border-radius: 6px; font-size: .85rem; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: background .2s, opacity .2s; }
+        .btn-primary { background: #3182ce; color: #fff; }
+        .btn-primary:hover { background: #2c5282; }
+        .btn-secondary { background: #718096; color: #fff; }
+        .btn-secondary:hover { background: #4a5568; }
+        .btn-danger { background: #e53e3e; color: #fff; }
+        .btn-danger:hover { background: #c53030; }
+        .btn-sm { padding: .3rem .7rem; font-size: .8rem; }
+
+        /* Form */
+        .form-group { margin-bottom: 1.2rem; }
+        .form-label { display: block; font-size: .875rem; font-weight: 600; color: #4a5568; margin-bottom: .4rem; }
+        .form-control { width: 100%; padding: .55rem .85rem; border: 1px solid #cbd5e0; border-radius: 6px; font-size: .95rem; color: #2d3748; transition: border-color .2s, box-shadow .2s; background: #fff; }
+        .form-control:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,.15); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        /* Alerts */
+        .alert { padding: .85rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; font-size: .9rem; }
+        .alert-danger { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
+
+        /* Badges */
+        .badge { display: inline-block; padding: .2rem .55rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+        .badge-blue { background: #ebf8ff; color: #2b6cb0; }
+
+        /* Detail grid */
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 2rem; }
+        .detail-item label { font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: #718096; font-weight: 600; }
+        .detail-item p { font-size: 1rem; color: #2d3748; margin-top: .2rem; }
+
+        /* Welcome section */
+        .welcome-hero { background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%); color: #fff; border-radius: 10px; padding: 2.5rem 2rem; margin-bottom: 2rem; }
+        .welcome-hero h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+        .welcome-hero p { color: #bee3f8; font-size: 1rem; }
+    </style>
+</head>
+<body>
+<nav>
+    <a class="brand" href="/">e-Arhiv</a>
+    <div class="nav-links">
+        <a href="/">Početna</a>
+        <a href="/racuni">Arhiva</a>
+    </div>
+    <div class="nav-right">
+        <a class="btn-add" href="/racuni/novi">+ Dodaj račun</a>
+        <span class="user-info" sec:authentication="name">korisnik</span>
+        <form class="logout-form" th:action="@{/logout}" method="post">
+            <button class="btn-logout" type="submit">Odjava</button>
+        </form>
+    </div>
+</nav>
+<div class="page-container">
+    <th:block th:replace="${content}"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head><title>Početna – e-Arhiv</title></head>
+<body>
+<main>
+    <div class="welcome-hero">
+        <h1>Dobrodošli u e-Arhiv</h1>
+        <p>Digitalna arhiva e-računa — pohranite, pretražite i preuzmite svoje račune na jednom mjestu.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Nedavno dodani računi</div>
+        <table th:if="${not #lists.isEmpty(recentniRacuni)}">
+            <thead>
+            <tr>
+                <th>Broj računa</th>
+                <th>Izdavatelj</th>
+                <th>Datum izdavanja</th>
+                <th>Iznos</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="r : ${nedavniRacuni}">
+                <td th:text="${r.brojRacuna}">R-001</td>
+                <td th:text="${r.izdavatelj}">Firma d.o.o.</td>
+                <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
+                <td><strong th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</strong></td>
+                <td><a class="btn btn-sm btn-secondary" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(recentniRacuni)}" style="color:#718096;">Još nema pohranjenih računa.</p>
+        <div style="margin-top:1.5rem;">
+            <a class="btn btn-primary" href="/racuni">Prikaži sve</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
