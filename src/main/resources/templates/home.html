@@ -11,7 +11,7 @@
 
     <div class="card">
         <div class="card-title">Nedavno dodani računi</div>
-        <table th:if="${not #lists.isEmpty(recentniRacuni)}">
+        <table th:if="${not #lists.isEmpty(nedavniRacuni)}">
             <thead>
             <tr>
                 <th>Broj računa</th>
@@ -31,7 +31,7 @@
             </tr>
             </tbody>
         </table>
-        <p th:if="${#lists.isEmpty(recentniRacuni)}" style="color:#718096;">Još nema pohranjenih računa.</p>
+        <p th:if="${#lists.isEmpty(nedavniRacuni)}" style="color:#718096;">Još nema pohranjenih računa.</p>
         <div style="margin-top:1.5rem;">
             <a class="btn btn-primary" href="/racuni">Prikaži sve</a>
         </div>

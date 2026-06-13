@@ -26,4 +26,7 @@ public class KorisnikDetalji {
 
     @Column(nullable = false)
     private boolean aktivan = true;
+
+    @Column(nullable = false)
+    private String uloga = "ROLE_USER";
 }

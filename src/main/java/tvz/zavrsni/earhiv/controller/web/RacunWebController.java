@@ -1,13 +1,18 @@
 package tvz.zavrsni.earhiv.controller.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tvz.zavrsni.earhiv.dto.RacunRequestDto;
@@ -29,8 +34,9 @@ public class RacunWebController {
     private final DatotekaRepository datotekaRepository;
 
     @GetMapping
-    public String lista(Model model) {
-        List<RacunSazetakDto> racuni = racunService.dohvatiSve(
+    public String lista(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        List<RacunSazetakDto> racuni = racunService.dohvatiByKorisnik(
+                userDetails.getUsername(),
                 PageRequest.of(0, 50, Sort.by("datumUcitavanja").descending())
         ).getContent().stream().map(this::toSazetakDto).toList();
         model.addAttribute("racuni", racuni);
@@ -44,8 +50,14 @@ public class RacunWebController {
     }
 
     @PostMapping
-    public String spremi(@ModelAttribute RacunRequestDto racunRequestDto,
-                         @RequestParam("datoteke") List<MultipartFile> datoteke) {
+    public String spremi(@Valid @ModelAttribute RacunRequestDto racunRequestDto,
+                         BindingResult bindingResult,
+                         @RequestParam(value = "datoteke", required = false) List<MultipartFile> datoteke,
+                         @AuthenticationPrincipal UserDetails userDetails) {
+        if (bindingResult.hasErrors()) {
+            return "racuni/forma";
+        }
+        racunRequestDto.setKorisnik(userDetails.getUsername());
         racunService.spremiRacun(racunRequestDto, datoteke);
         return "redirect:/racuni";
     }

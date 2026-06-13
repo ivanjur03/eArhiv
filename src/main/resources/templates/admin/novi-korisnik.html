@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head><title>Novi korisnik – e-Arhiv</title></head>
+<body>
+<main>
+    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+        <a class="btn btn-secondary btn-sm" href="/admin">← Natrag</a>
+        <h2 style="font-size:1.3rem; color:#1a365d;">Novi korisnik</h2>
+    </div>
+
+    <div class="card" style="max-width:520px;">
+        <div class="card-title">Podaci novog korisnika</div>
+        <form th:action="@{/admin/novi-korisnik}" th:object="${korisnikRequestDto}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="korisnickoIme">Korisničko ime *</label>
+                    <input class="form-control" th:classappend="${#fields.hasErrors('korisnickoIme')} ? 'is-invalid'"
+                           type="text" id="korisnickoIme" th:field="*{korisnickoIme}"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('korisnickoIme')}"
+                          th:errors="*{korisnickoIme}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="lozinka">Lozinka *</label>
+                    <input class="form-control" th:classappend="${#fields.hasErrors('lozinka')} ? 'is-invalid'"
+                           type="password" id="lozinka" th:field="*{lozinka}"/>
+                    <span class="field-error" th:if="${#fields.hasErrors('lozinka')}"
+                          th:errors="*{lozinka}"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="ime">Ime</label>
+                    <input class="form-control" type="text" id="ime" th:field="*{ime}"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="prezime">Prezime</label>
+                    <input class="form-control" type="text" id="prezime" th:field="*{prezime}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                       type="email" id="email" th:field="*{email}"/>
+                <span class="field-error" th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}"></span>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="uloga">Uloga</label>
+                <select class="form-control" id="uloga" th:field="*{uloga}">
+                    <option value="ROLE_USER">Korisnik</option>
+                    <option value="ROLE_ADMIN">Administrator</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:1rem; margin-top:.5rem;">
+                <button class="btn btn-primary" type="submit">Kreiraj korisnika</button>
+                <a class="btn btn-secondary" href="/admin">Odustani</a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

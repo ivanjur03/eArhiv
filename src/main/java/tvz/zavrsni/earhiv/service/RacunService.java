@@ -78,6 +78,10 @@ public class RacunService {
         return s3Service.download(datoteka.getS3Kljuc());
     }
 
+    public Page<Racun> dohvatiByKorisnik(String korisnik, Pageable pageable) {
+        return racunRepository.findByKorisnik(korisnik, pageable);
+    }
+
     @Transactional
     public void obrisi(Long id) {
         Racun racun = dohvatiById(id);

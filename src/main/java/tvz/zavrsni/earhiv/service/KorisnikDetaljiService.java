@@ -19,10 +19,13 @@ public class KorisnikDetaljiService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         KorisnikDetalji korisnik = korisnikDetaljiRepository.findByKorisnickoIme(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Korisnik nije pronađen: " + username));
+
+        String uloga = korisnik.getUloga();
+
         return User.builder()
                 .username(korisnik.getKorisnickoIme())
                 .password(korisnik.getLozinka())
-                .roles("USER")
+                .authorities(uloga)
                 .build();
     }
 }
