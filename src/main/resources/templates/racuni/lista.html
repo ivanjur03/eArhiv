@@ -4,49 +4,47 @@
 <head><title>Arhiva računa – e-Arhiv</title></head>
 <body>
 <main>
-    <div class="card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-            <h2 class="card-title" style="margin-bottom:0; border-bottom:none;">Arhiva računa</h2>
-            <a class="btn btn-primary" href="/racuni/novi">+ Dodaj račun</a>
-        </div>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-white fw-bold mb-0">Arhiva računa</h2>
+        <a href="/racuni/novi" class="btn btn-primary">+ Dodaj račun</a>
+    </div>
 
-        <table th:if="${not #lists.isEmpty(racuni)}">
-            <thead>
-            <tr>
-                <th>Broj računa</th>
-                <th>Izdavatelj</th>
-                <th>Datum</th>
-                <th>Iznos</th>
-                <th>Datoteke</th>
-                <th>Akcije</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="r : ${racuni}">
-                <td>
-                    <a th:href="@{/racuni/{id}(id=${r.id})}"
-                       th:text="${r.brojRacuna}"
-                       style="color:#3182ce; text-decoration:none; font-weight:600;">R-001</a>
-                </td>
-                <td th:text="${r.izdavatelj}">Firma d.o.o.</td>
-                <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
-                <td><strong th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</strong></td>
-                <td>
-                    <span class="badge badge-blue" th:text="${r.brojDatoteka}">0</span>
-                </td>
-                <td style="display:flex; gap:.5rem; align-items:center;">
-                    <a class="btn btn-sm btn-secondary" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a>
-                    <form th:action="@{/racuni/{id}/obrisi(id=${r.id})}" method="post"
-                          onsubmit="return confirm('Jeste li sigurni da želite obrisati ovaj račun?')">
-                        <button class="btn btn-sm btn-danger" type="submit">Obriši</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <p th:if="${#lists.isEmpty(racuni)}" style="color:#718096; padding:1rem 0;">
-            Nema pohranjenih računa. <a href="/racuni/novi" style="color:#3182ce;">Dodajte prvi račun.</a>
-        </p>
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover align-middle mb-0" th:if="${not #lists.isEmpty(racuni)}">
+                <thead>
+                <tr>
+                    <th>Broj računa</th>
+                    <th>Izdavatelj</th>
+                    <th>Datum</th>
+                    <th>Iznos</th>
+                    <th>Datoteke</th>
+                    <th>Akcije</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="r : ${racuni}">
+                    <td><a class="fw-semibold text-decoration-none" th:href="@{/racuni/{id}(id=${r.id})}" th:text="${r.brojRacuna}">R-001</a></td>
+                    <td th:text="${r.izdavatelj}">Firma d.o.o.</td>
+                    <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
+                    <td class="fw-bold" th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</td>
+                    <td><span class="badge-custom" th:text="${r.brojDatoteka}">0</span></td>
+                    <td>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a class="btn btn-outline-secondary btn-sm" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a>
+                            <form th:action="@{/racuni/{id}/obrisi(id=${r.id})}" method="post" class="m-0"
+                                  onsubmit="return confirm('Jeste li sigurni da želite obrisati ovaj račun?')">
+                                <button class="btn btn-danger btn-sm" type="submit">Obriši</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="text-muted mb-0" th:if="${#lists.isEmpty(racuni)}">
+                Nema pohranjenih računa. <a href="/racuni/novi">Dodajte prvi račun.</a>
+            </p>
+        </div>
     </div>
 </main>
 </body>

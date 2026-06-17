@@ -4,79 +4,69 @@
 <head><title>Novi račun – e-Arhiv</title></head>
 <body>
 <main>
-    <div class="card" style="max-width:780px; margin:0 auto;">
-        <div class="card-title">Dodaj novi račun</div>
-        <form th:action="@{/racuni}" th:object="${racunRequestDto}" method="post" enctype="multipart/form-data">
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="brojRacuna">Broj računa *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('brojRacuna')} ? 'is-invalid'"
-                           type="text" id="brojRacuna" th:field="*{brojRacuna}"
-                           placeholder="npr. R-2024-001"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('brojRacuna')}"
-                          th:errors="*{brojRacuna}"></span>
+    <h2 class="text-white fw-bold mb-3">Dodaj novi račun</h2>
+    <div class="card" style="max-width:800px;">
+        <div class="card-body">
+            <form th:action="@{/racuni}" th:object="${racunRequestDto}" method="post" enctype="multipart/form-data">
+                <div class="row g-3 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="brojRacuna">Broj računa *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('brojRacuna')} ? 'is-invalid'"
+                               type="text" id="brojRacuna" th:field="*{brojRacuna}" placeholder="npr. R-2024-001"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('brojRacuna')}" th:errors="*{brojRacuna}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="izdavatelj">Izdavatelj *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('izdavatelj')} ? 'is-invalid'"
+                               type="text" id="izdavatelj" th:field="*{izdavatelj}" placeholder="Naziv tvrtke izdavatelja"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('izdavatelj')}" th:errors="*{izdavatelj}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="primatelj">Primatelj</label>
+                        <input class="form-control" type="text" id="primatelj" th:field="*{primatelj}" placeholder="Naziv primatelja"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="datumIzdavanja">Datum izdavanja *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('datumIzdavanja')} ? 'is-invalid'"
+                               type="date" id="datumIzdavanja" th:field="*{datumIzdavanja}"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('datumIzdavanja')}" th:errors="*{datumIzdavanja}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="datumDospijeca">Datum dospijeća</label>
+                        <input class="form-control" type="date" id="datumDospijeca" th:field="*{datumDospijeca}"/>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold" for="iznos">Iznos *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('iznos')} ? 'is-invalid'"
+                               type="number" id="iznos" th:field="*{iznos}" step="0.01" min="0.01" placeholder="0.00"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('iznos')}" th:errors="*{iznos}"></div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold" for="valuta">Valuta</label>
+                        <select class="form-select" id="valuta" th:field="*{valuta}">
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="HRK">HRK</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="opis">Opis / napomena</label>
+                        <textarea class="form-control" id="opis" th:field="*{opis}" rows="3"
+                                  placeholder="Opcionalni opis ili napomena uz račun"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="datoteke">Priložene datoteke</label>
+                        <input class="form-control" type="file" id="datoteke" name="datoteke" multiple/>
+                        <div class="form-text">Možete priložiti više datoteka (PDF, XML, slike…). Maks. 50 MB po datoteci.</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="izdavatelj">Izdavatelj *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('izdavatelj')} ? 'is-invalid'"
-                           type="text" id="izdavatelj" th:field="*{izdavatelj}"
-                           placeholder="Naziv tvrtke izdavatelja"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('izdavatelj')}"
-                          th:errors="*{izdavatelj}"></span>
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-primary" type="submit">Spremi račun</button>
+                    <a class="btn btn-outline-secondary" href="/racuni">Odustani</a>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="primatelj">Primatelj</label>
-                    <input class="form-control" type="text" id="primatelj" th:field="*{primatelj}"
-                           placeholder="Naziv primatelja"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="datumIzdavanja">Datum izdavanja *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('datumIzdavanja')} ? 'is-invalid'"
-                           type="date" id="datumIzdavanja" th:field="*{datumIzdavanja}"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('datumIzdavanja')}"
-                          th:errors="*{datumIzdavanja}"></span>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="datumDospijeca">Datum dospijeća</label>
-                    <input class="form-control" type="date" id="datumDospijeca" th:field="*{datumDospijeca}"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="iznos">Iznos *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('iznos')} ? 'is-invalid'"
-                           type="number" id="iznos" th:field="*{iznos}"
-                           step="0.01" min="0.01" placeholder="0.00"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('iznos')}"
-                          th:errors="*{iznos}"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="valuta">Valuta</label>
-                <select class="form-control" id="valuta" th:field="*{valuta}">
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="HRK">HRK</option>
-                    <option value="GBP">GBP</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="opis">Opis / napomena</label>
-                <textarea class="form-control" id="opis" th:field="*{opis}" rows="3"
-                          placeholder="Opcionalni opis ili napomena uz račun"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="datoteke">Priložene datoteke</label>
-                <input class="form-control" type="file" id="datoteke" name="datoteke" multiple/>
-                <small style="color:#718096; font-size:.8rem;">Možete priložiti više datoteka (PDF, XML, slike…). Maks. 50 MB po datoteci.</small>
-            </div>
-            <div style="display:flex; gap:1rem; margin-top:.5rem;">
-                <button class="btn btn-primary" type="submit">Spremi račun</button>
-                <a class="btn btn-secondary" href="/racuni">Odustani</a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </main>
 </body>

@@ -4,71 +4,69 @@
 <head><title>Admin dashboard – e-Arhiv</title></head>
 <body>
 <main>
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
-        <h2 style="font-size:1.4rem; color:#1a365d; font-weight:700;">Admin dashboard</h2>
-        <a class="btn btn-primary" href="/admin/novi-korisnik">+ Novi korisnik</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-white fw-bold mb-0">Admin dashboard</h2>
+        <a href="/admin/novi-korisnik" class="btn btn-primary">+ Novi korisnik</a>
     </div>
 
-    <div style="display:grid; grid-template-columns:2fr 1fr; gap:1.5rem; align-items:start;">
-
-        <!-- Nedavni uploadi -->
-        <div class="card">
-            <div class="card-title">Nedavni uploadi</div>
-            <table th:if="${not #lists.isEmpty(nedavniUploadi)}">
-                <thead>
-                <tr>
-                    <th>Broj računa</th>
-                    <th>Korisnik</th>
-                    <th>Izdavatelj</th>
-                    <th>Datum</th>
-                    <th>Iznos</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="r : ${nedavniUploadi}">
-                    <td th:text="${r.brojRacuna}">R-001</td>
-                    <td>
-                        <a th:href="@{/admin/korisnici/{ime}(ime=${r.korisnik})}"
-                           th:text="${r.korisnik}"
-                           style="color:#3182ce; text-decoration:none; font-weight:600;">korisnik</a>
-                    </td>
-                    <td th:text="${r.izdavatelj}">Firma</td>
-                    <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
-                    <td th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</td>
-                    <td><a class="btn btn-sm btn-secondary" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a></td>
-                </tr>
-                </tbody>
-            </table>
-            <p th:if="${#lists.isEmpty(nedavniUploadi)}" style="color:#718096;">Nema uploada.</p>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-header-custom">Nedavni uploadi</div>
+                    <table class="table table-hover align-middle mb-0" th:if="${not #lists.isEmpty(nedavniUploadi)}">
+                        <thead>
+                        <tr>
+                            <th>Broj računa</th>
+                            <th>Korisnik</th>
+                            <th>Izdavatelj</th>
+                            <th>Datum</th>
+                            <th>Iznos</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="r : ${nedavniUploadi}">
+                            <td class="fw-semibold" th:text="${r.brojRacuna}">R-001</td>
+                            <td><a class="text-decoration-none fw-semibold" th:href="@{/admin/korisnici/{ime}(ime=${r.korisnik})}" th:text="${r.korisnik}">korisnik</a></td>
+                            <td th:text="${r.izdavatelj}">Firma</td>
+                            <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
+                            <td th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</td>
+                            <td><a class="btn btn-outline-secondary btn-sm" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-muted mb-0" th:if="${#lists.isEmpty(nedavniUploadi)}">Nema uploada.</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Lista korisnika -->
-        <div class="card">
-            <div class="card-title">Korisnici</div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Korisnik</th>
-                    <th>Uloga</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="k : ${korisnici}">
-                    <td th:text="${k.korisnickoIme}">korisnik</td>
-                    <td>
-                        <span class="badge"
-                              th:classappend="${k.uloga == 'ROLE_ADMIN'} ? 'badge-blue' : ''"
-                              th:text="${k.uloga == 'ROLE_ADMIN'} ? 'Admin' : 'Korisnik'">Korisnik</span>
-                    </td>
-                    <td>
-                        <a class="btn btn-sm btn-secondary"
-                           th:href="@{/admin/korisnici/{ime}(ime=${k.korisnickoIme})}">Povijest</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="col-lg-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-header-custom">Korisnici</div>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>Korisnik</th>
+                            <th>Uloga</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="k : ${korisnici}">
+                            <td th:text="${k.korisnickoIme}">korisnik</td>
+                            <td>
+                                <span class="badge-custom" th:text="${k.uloga == 'ROLE_ADMIN'} ? 'Admin' : 'Korisnik'">Korisnik</span>
+                            </td>
+                            <td>
+                                <a class="btn btn-outline-secondary btn-sm" th:href="@{/admin/korisnici/{ime}(ime=${k.korisnickoIme})}">Povijest</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </main>

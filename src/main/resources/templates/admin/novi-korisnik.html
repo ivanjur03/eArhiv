@@ -4,59 +4,56 @@
 <head><title>Novi korisnik – e-Arhiv</title></head>
 <body>
 <main>
-    <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
-        <a class="btn btn-secondary btn-sm" href="/admin">← Natrag</a>
-        <h2 style="font-size:1.3rem; color:#1a365d;">Novi korisnik</h2>
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <a href="/admin" class="btn btn-outline-light btn-sm">← Natrag</a>
+        <h2 class="text-white fw-bold mb-0">Novi korisnik</h2>
     </div>
 
-    <div class="card" style="max-width:520px;">
-        <div class="card-title">Podaci novog korisnika</div>
-        <form th:action="@{/admin/novi-korisnik}" th:object="${korisnikRequestDto}" method="post">
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="korisnickoIme">Korisničko ime *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('korisnickoIme')} ? 'is-invalid'"
-                           type="text" id="korisnickoIme" th:field="*{korisnickoIme}"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('korisnickoIme')}"
-                          th:errors="*{korisnickoIme}"></span>
+    <div class="card" style="max-width:560px;">
+        <div class="card-body">
+            <div class="card-header-custom">Podaci novog korisnika</div>
+            <form th:action="@{/admin/novi-korisnik}" th:object="${korisnikRequestDto}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="korisnickoIme">Korisničko ime *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('korisnickoIme')} ? 'is-invalid'"
+                               type="text" id="korisnickoIme" th:field="*{korisnickoIme}"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('korisnickoIme')}" th:errors="*{korisnickoIme}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="lozinka">Lozinka *</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('lozinka')} ? 'is-invalid'"
+                               type="password" id="lozinka" th:field="*{lozinka}"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('lozinka')}" th:errors="*{lozinka}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="ime">Ime</label>
+                        <input class="form-control" type="text" id="ime" th:field="*{ime}"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="prezime">Prezime</label>
+                        <input class="form-control" type="text" id="prezime" th:field="*{prezime}"/>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="email">Email</label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                               type="email" id="email" th:field="*{email}"/>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold" for="uloga">Uloga</label>
+                        <select class="form-select" id="uloga" th:field="*{uloga}">
+                            <option value="ROLE_USER">Korisnik</option>
+                            <option value="ROLE_ADMIN">Administrator</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="lozinka">Lozinka *</label>
-                    <input class="form-control" th:classappend="${#fields.hasErrors('lozinka')} ? 'is-invalid'"
-                           type="password" id="lozinka" th:field="*{lozinka}"/>
-                    <span class="field-error" th:if="${#fields.hasErrors('lozinka')}"
-                          th:errors="*{lozinka}"></span>
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary" type="submit">Kreiraj korisnika</button>
+                    <a class="btn btn-outline-secondary" href="/admin">Odustani</a>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="ime">Ime</label>
-                    <input class="form-control" type="text" id="ime" th:field="*{ime}"/>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="prezime">Prezime</label>
-                    <input class="form-control" type="text" id="prezime" th:field="*{prezime}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="email">Email</label>
-                <input class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
-                       type="email" id="email" th:field="*{email}"/>
-                <span class="field-error" th:if="${#fields.hasErrors('email')}"
-                      th:errors="*{email}"></span>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="uloga">Uloga</label>
-                <select class="form-control" id="uloga" th:field="*{uloga}">
-                    <option value="ROLE_USER">Korisnik</option>
-                    <option value="ROLE_ADMIN">Administrator</option>
-                </select>
-            </div>
-            <div style="display:flex; gap:1rem; margin-top:.5rem;">
-                <button class="btn btn-primary" type="submit">Kreiraj korisnika</button>
-                <a class="btn btn-secondary" href="/admin">Odustani</a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </main>
 </body>

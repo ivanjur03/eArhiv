@@ -1,5 +1,11 @@
 package tvz.zavrsni.earhiv.controller.api;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +27,7 @@ import tvz.zavrsni.earhiv.service.RacunService;
 
 import java.util.List;
 
+@Tag(name = "Računi", description = "Upravljanje e-računima i priloženim datotekama")
 @RestController
 @RequestMapping("/api/racuni")
 @RequiredArgsConstructor
@@ -29,6 +36,8 @@ public class RacunApiController {
     private final RacunService racunService;
     private final DatotekaRepository datotekaRepository;
 
+    @Operation(summary = "Kreiraj novi račun", description = "Pohrani novi račun s opcionalnim priloženim datotekama na S3")
+    @ApiResponse(responseCode = "201", description = "Račun uspješno kreiran")
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public RacunResponseDto kreiraj(
@@ -38,18 +47,31 @@ public class RacunApiController {
         return toResponseDto(racun);
     }
 
+    @Operation(summary = "Lista svih računa", description = "Straničena lista svih računa u arhivi")
     @GetMapping("/")
-    public Page<RacunSazetakDto> lista(Pageable pageable) {
+    public Page<RacunSazetakDto> lista(
+            @Parameter(description = "Broj stranice") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Veličina stranice") @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "Polje za sortiranje, npr. datumUcitavanja,desc") @RequestParam(defaultValue = "id,asc") String sort) {
+        String[] parts = sort.split(",");
+        Sort.Direction dir = parts.length > 1 && parts[1].equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, parts[0]));
         return racunService.dohvatiSve(pageable).map(this::toSazetakDto);
     }
 
+    @Operation(summary = "Detalji računa")
+    @ApiResponse(responseCode = "404", description = "Račun nije pronađen")
     @GetMapping("/{id}")
-    public RacunResponseDto detalj(@PathVariable Long id) {
+    public RacunResponseDto detalj(@Parameter(description = "ID računa") @PathVariable Long id) {
         return toResponseDto(racunService.dohvatiById(id));
     }
 
+    @Operation(summary = "Preuzmi datoteku", description = "Preuzmi priloženu datoteku iz S3 pohrane")
+    @ApiResponse(responseCode = "404", description = "Datoteka nije pronađena")
     @GetMapping("/datoteke/{datotekaId}/download")
-    public ResponseEntity<byte[]> downloadDatoteka(@PathVariable Long datotekaId) {
+    public ResponseEntity<byte[]> downloadDatoteka(
+            @Parameter(description = "ID datoteke") @PathVariable Long datotekaId) {
         Datoteka datoteka = datotekaRepository.findById(datotekaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Datoteka nije pronađena: " + datotekaId));
         byte[] bytes = racunService.dohvatiDatoteku(datotekaId);
@@ -59,9 +81,12 @@ public class RacunApiController {
                 .body(bytes);
     }
 
+    @Operation(summary = "Obriši račun", description = "Briše račun i sve priložene datoteke iz S3 pohrane")
+    @ApiResponse(responseCode = "204", description = "Račun uspješno obrisan")
+    @ApiResponse(responseCode = "404", description = "Račun nije pronađen")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void obrisi(@PathVariable Long id) {
+    public void obrisi(@Parameter(description = "ID računa") @PathVariable Long id) {
         racunService.obrisi(id);
     }
 
