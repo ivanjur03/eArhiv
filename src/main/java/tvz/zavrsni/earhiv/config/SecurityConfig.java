@@ -15,7 +15,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain apiFilterChain(HttpSecurity http){
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain webFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain webFilterChain(HttpSecurity http){
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/error").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()

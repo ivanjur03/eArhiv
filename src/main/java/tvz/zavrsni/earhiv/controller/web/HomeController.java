@@ -8,7 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import tvz.zavrsni.earhiv.entity.Racun;
 import tvz.zavrsni.earhiv.service.RacunService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,7 +21,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        var nedavniRacuni = racunService.dohvatiByKorisnik(
+        List<Racun> nedavniRacuni = racunService.dohvatiByKorisnik(
                 userDetails.getUsername(),
                 PageRequest.of(0, 5, Sort.by("datumUcitavanja").descending())
         ).getContent();

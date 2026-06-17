@@ -11,8 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tvz.zavrsni.earhiv.dto.KorisnikRequestDto;
 import tvz.zavrsni.earhiv.entity.KorisnikDetalji;
+import tvz.zavrsni.earhiv.entity.Racun;
 import tvz.zavrsni.earhiv.repository.KorisnikDetaljiRepository;
 import tvz.zavrsni.earhiv.service.RacunService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,10 +29,10 @@ public class AdminController {
     @GetMapping
     public String dashboard(Model model,
                             @RequestParam(defaultValue = "20") int broj) {
-        var nedavniUploadi = racunService.dohvatiSve(
+        List<Racun> nedavniUploadi = racunService.dohvatiSve(
                 PageRequest.of(0, broj, Sort.by("datumUcitavanja").descending())
         ).getContent();
-        var korisnici = korisnikDetaljiRepository.findAll();
+        List<KorisnikDetalji> korisnici = korisnikDetaljiRepository.findAll();
         model.addAttribute("nedavniUploadi", nedavniUploadi);
         model.addAttribute("korisnici", korisnici);
         return "admin/dashboard";
@@ -37,7 +40,7 @@ public class AdminController {
 
     @GetMapping("/korisnici/{korisnickoIme}")
     public String povijestKorisnika(@PathVariable String korisnickoIme, Model model) {
-        var racuni = racunService.dohvatiByKorisnik(
+        List<Racun> racuni = racunService.dohvatiByKorisnik(
                 korisnickoIme,
                 PageRequest.of(0, 100, Sort.by("datumUcitavanja").descending())
         ).getContent(); //ambiciozno stavljeno 100
