@@ -94,6 +94,7 @@ public class RacunWebController {
                 .iznos(racun.getIznos())
                 .valuta(racun.getValuta())
                 .izdavatelj(racun.getIzdavatelj())
+                .primatelj(racun.getPrimatelj())
                 .brojDatoteka(racun.getDatoteke().size())
                 .build();
     }

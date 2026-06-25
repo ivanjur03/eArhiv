@@ -15,5 +15,6 @@ public class RacunSazetakDto {
     private BigDecimal iznos;
     private String valuta;
     private String izdavatelj;
+    private String primatelj;
     private int brojDatoteka;
 }

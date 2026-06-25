@@ -19,7 +19,7 @@
                 <thead>
                 <tr>
                     <th>Broj računa</th>
-                    <th>Izdavatelj</th>
+                    <th>Primatelj</th>
                     <th>Datum izdavanja</th>
                     <th>Iznos</th>
                     <th></th>
@@ -28,7 +28,7 @@
                 <tbody>
                 <tr th:each="r : ${nedavniRacuni}">
                     <td class="fw-semibold" th:text="${r.brojRacuna}">R-001</td>
-                    <td th:text="${r.izdavatelj}">Firma d.o.o.</td>
+                    <td th:text="${r.primatelj}">Firma d.o.o.</td>
                     <td th:text="${#temporals.format(r.datumIzdavanja, 'dd.MM.yyyy')}">01.01.2024</td>
                     <td class="fw-bold" th:text="${#numbers.formatDecimal(r.iznos, 1, 2) + ' ' + r.valuta}">100,00 EUR</td>
                     <td><a class="btn btn-outline-secondary btn-sm" th:href="@{/racuni/{id}(id=${r.id})}">Detalji</a></td>

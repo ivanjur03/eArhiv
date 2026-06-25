@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain webFilterChain(HttpSecurity http){
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/error").permitAll()
+                        .requestMatchers("/login", "/error").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())

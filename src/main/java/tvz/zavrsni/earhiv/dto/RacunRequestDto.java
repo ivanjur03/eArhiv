@@ -31,7 +31,9 @@ public class RacunRequestDto {
     @NotBlank(message = "Izdavatelj je obavezan")
     private String izdavatelj;
 
+    @NotBlank(message = "Primatelj je obavezan")
     private String primatelj;
+
     private String opis;
     private String korisnik;
 }
