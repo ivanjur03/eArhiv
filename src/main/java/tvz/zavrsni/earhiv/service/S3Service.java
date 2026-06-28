@@ -20,6 +20,15 @@ public class S3Service {
     @Value("${aws.s3.bucket}")
     private String bucket;
 
+    /**
+     * Uploada sadržaj na S3 pod zadanim ključem.
+     *
+     * @param key           S3 ključ pod kojim se objekt sprema
+     * @param inputStream   sadržaj datoteke
+     * @param contentLength veličina sadržaja u bajtovima
+     * @param contentType   MIME tip datoteke
+     * @return ključ pod kojim je objekt spremljen
+     */
     public String upload(String key, InputStream inputStream, long contentLength, String contentType) {
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucket)
@@ -31,6 +40,10 @@ public class S3Service {
         return key;
     }
 
+    /**
+     * @param key S3 ključ objekta
+     * @return sadržaj objekta kao niz bajtova
+     */
     public byte[] download(String key) {
         GetObjectRequest request = GetObjectRequest.builder()
                 .bucket(bucket)
@@ -39,6 +52,11 @@ public class S3Service {
         return s3Client.getObjectAsBytes(request).asByteArray();
     }
 
+    /**
+     * Briše objekt s S3.
+     *
+     * @param key S3 ključ objekta za brisanje
+     */
     public void delete(String key) {
         DeleteObjectRequest request = DeleteObjectRequest.builder()
                 .bucket(bucket)

@@ -15,6 +15,13 @@ public class KorisnikDetaljiService implements UserDetailsService {
 
     private final KorisnikDetaljiRepository korisnikDetaljiRepository;
 
+    /**
+     * Učitava korisnika iz baze i mapira ga u Spring Security {@link UserDetails}, s {@code uloga} kao authority.
+     *
+     * @param username korisničko ime
+     * @return podaci o korisniku za autentikaciju
+     * @throws UsernameNotFoundException ako korisnik ne postoji
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         KorisnikDetalji korisnik = korisnikDetaljiRepository.findByKorisnickoIme(username)

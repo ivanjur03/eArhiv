@@ -13,6 +13,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * Lanac za REST (/api/**): stateless HTTP Basic auth, bez CSRF-a.
+     *
+     * @param http Spring Security konfiguracija
+     * @return filter chain za /api/** rute
+     */
     @Bean
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http){
@@ -25,6 +31,12 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Lanac za web sučelje: form login, zaštita /admin/** te redirect neulogiranih na /login.
+     *
+     * @param http Spring Security konfiguracija
+     * @return filter chain za web rute
+     */
     @Bean
     @Order(2)
     public SecurityFilterChain webFilterChain(HttpSecurity http){

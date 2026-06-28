@@ -24,6 +24,13 @@ public class RacunService {
     private final DatotekaRepository datotekaRepository;
     private final S3Service s3Service;
 
+    /**
+     * Sprema račun u bazu te svaku priloženu datoteku uploada na S3 i bilježi kao {@link Datoteka}.
+     *
+     * @param dto      podaci o računu iz forme
+     * @param datoteke priložene datoteke (može biti {@code null} ili prazno)
+     * @return spremljeni račun s pridruženim datotekama
+     */
     @Transactional
     public Racun spremiRacun(RacunRequestDto dto, List<MultipartFile> datoteke) {
         Racun racun = new Racun();
@@ -67,11 +74,22 @@ public class RacunService {
         return racunRepository.findAll(pageable);
     }
 
+    /**
+     * @param id ID računa
+     * @return pronađeni račun
+     * @throws ResourceNotFoundException ako račun s danim ID-em ne postoji
+     */
     public Racun dohvatiById(Long id) {
         return racunRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Račun nije pronađen: " + id));
     }
 
+    /**
+     * Dohvaća sadržaj datoteke s S3 prema njezinom DB zapisu.
+     *
+     * @param datotekaId ID datoteke
+     * @return sadržaj datoteke kao niz bajtova
+     */
     public byte[] dohvatiDatoteku(Long datotekaId) {
         Datoteka datoteka = datotekaRepository.findById(datotekaId)
                 .orElseThrow(() -> new ResourceNotFoundException("Datoteka nije pronađena: " + datotekaId));
@@ -82,10 +100,19 @@ public class RacunService {
         return racunRepository.findByKorisnik(korisnik, pageable);
     }
 
+    /**
+     * @param korisnik korisničko ime
+     * @return ukupna veličina svih datoteka korisnika u bajtovima
+     */
     public long ukupnoZauzeceKorisnika(String korisnik) {
         return racunRepository.ukupnoBajtovaZaKorisnika(korisnik);
     }
 
+    /**
+     * Briše račun iz baze i sve njegove datoteke s S3.
+     *
+     * @param id ID računa za brisanje
+     */
     @Transactional
     public void obrisi(Long id) {
         Racun racun = dohvatiById(id);

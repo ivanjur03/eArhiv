@@ -45,6 +45,10 @@ public class RacunWebController {
         return "racuni/lista";
     }
 
+    /**
+     * @param bajtovi broj bajtova
+     * @return čitljiv prikaz veličine (B/KB/MB/GB)
+     */
     private String formatirajBajtove(long bajtovi) {
         if (bajtovi < 1024) return bajtovi + " B";
         if (bajtovi < 1024 * 1024) return String.format("%.1f KB", bajtovi / 1024.0);
