@@ -40,7 +40,16 @@ public class RacunWebController {
                 PageRequest.of(0, 50, Sort.by("datumUcitavanja").descending())
         ).getContent().stream().map(this::toSazetakDto).toList();
         model.addAttribute("racuni", racuni);
+        model.addAttribute("zauzece", formatirajBajtove(
+                racunService.ukupnoZauzeceKorisnika(userDetails.getUsername())));
         return "racuni/lista";
+    }
+
+    private String formatirajBajtove(long bajtovi) {
+        if (bajtovi < 1024) return bajtovi + " B";
+        if (bajtovi < 1024 * 1024) return String.format("%.1f KB", bajtovi / 1024.0);
+        if (bajtovi < 1024L * 1024 * 1024) return String.format("%.1f MB", bajtovi / (1024.0 * 1024));
+        return String.format("%.2f GB", bajtovi / (1024.0 * 1024 * 1024));
     }
 
     @GetMapping("/novi")

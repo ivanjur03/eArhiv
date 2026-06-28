@@ -82,6 +82,10 @@ public class RacunService {
         return racunRepository.findByKorisnik(korisnik, pageable);
     }
 
+    public long ukupnoZauzeceKorisnika(String korisnik) {
+        return racunRepository.ukupnoBajtovaZaKorisnika(korisnik);
+    }
+
     @Transactional
     public void obrisi(Long id) {
         Racun racun = dohvatiById(id);
